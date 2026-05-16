@@ -1,0 +1,30 @@
+# Maven
+target/
+.mvn/wrapper/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+
+# IDE
+.vscode/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Build logs
+*.log
