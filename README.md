@@ -26,10 +26,11 @@ Aplicatie web pentru gestionarea ciclului de viata al plangerilor asociate asset
 - Lombok
 - JWT (autentificare)
 - BCrypt (hash parole)
-- H2 Database
+- PostgreSQL Database
 - Jackson (JSON)
 - Swagger / OpenAPI
 - iText (Rapoart PDF)
+- WildFly (application server)
 <img width="1902" height="1077" alt="image" src="https://github.com/user-attachments/assets/565fec55-cb34-4a7b-b15d-e46ef7ca8da5" />
 <img width="1916" height="1076" alt="image" src="https://github.com/user-attachments/assets/2e8de8a1-a924-4f27-98d9-eed02a7e6981" />
 <img width="1915" height="1078" alt="image" src="https://github.com/user-attachments/assets/36407245-8862-4d50-a313-01b1afca1025" />
