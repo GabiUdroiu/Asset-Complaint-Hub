@@ -1,0 +1,112 @@
+@use '@angular/material' as mat;
+
+// ==============================================================================
+// LIGHT THEME VARIABLES
+// ==============================================================================
+:root {
+    // Layout
+    --navbar-height: 46px;
+
+    // Colors
+    --color-primary: #1976d2;
+    --color-primary-dark: #1565c0;
+    --color-primary-light: #60a5fa;
+    --color-accent: #f50057;
+    --color-warn: #ff6f00;
+    --color-success: #4caf50;
+    --color-error: #f44336;
+    --color-info: #2196f3;
+
+    // Backgrounds
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f7f8;
+    --bg-tertiary: #eeeeee;
+    --bg-overlay: rgba(0, 0, 0, 0.5);
+
+    // Text
+    --text-primary: #212121;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --text-inverse: #ffffff;
+
+    // Borders & Shadows
+    --border-color: #e0e0e0;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 3px 5px rgba(0, 0, 0, 0.16);
+    --shadow-lg: 0 6px 10px rgba(0, 0, 0, 0.2);
+
+    // Snackbar
+    --snackbar-bg: #323232;
+    --snackbar-success: #4caf50;
+    --snackbar-error: #f44336;
+    --snackbar-info: #2196f3;
+    --snackbar-text: #ffffff;
+}
+
+// ==============================================================================
+// DARK THEME VARIABLES
+// ==============================================================================
+[data-theme='dark'] {
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-primary-light: #93c5fd;
+    --color-accent: #ff1493;
+    --color-warn: #ffb74d;
+    --color-success: #66bb6a;
+    --color-error: #ef5350;
+    --color-info: #60a5fa;
+
+    // Backgrounds
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2a2a2a;
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+
+    // Text
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-tertiary: #808080;
+    --text-inverse: #121212;
+
+    // Borders & Shadows
+    --border-color: #333333;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 3px 5px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 6px 10px rgba(0, 0, 0, 0.5);
+
+    // Snackbar
+    --snackbar-bg: #424242;
+    --snackbar-success: #66bb6a;
+    --snackbar-error: #ef5350;
+    --snackbar-info: #42a5f5;
+    --snackbar-text: #e0e0e0;
+}
+
+// ==============================================================================
+// MATERIAL THEME
+// ==============================================================================
+html {
+    height: 100%;
+    @include mat.theme(
+        (
+            color: (
+                primary: mat.$azure-palette,
+                tertiary: mat.$blue-palette,
+            ),
+            typography: Roboto,
+            density: 0,
+        )
+    );
+}
+
+body {
+    color-scheme: light;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font: var(--mat-sys-body-medium);
+    margin: 0;
+    height: 100%;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
+}

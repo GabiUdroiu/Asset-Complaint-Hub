@@ -1,0 +1,17 @@
+<app-data-list
+    pageTitle="Requests"
+    pageSubtitle="View and manage demands and requests"
+    emptyStateIcon="description"
+    emptyStateMessage="No requests found"
+    emptyStateFilteredMessage="Adjust your filters to see requests"
+    [columnDefs]="columnDefs"
+    [statusOptions]="statusOptions"
+    [departmentOptions]="departmentOptions"
+    [showCategoryFilter]="false"
+    [showDepartmentFilter]="userService.isInSupportMode() && userService.isAdmin()"
+    [showViewModeToggle]="false"
+    [actionButton]="{ label: 'Export', icon: 'file_download', click: openDownloadMenu }"
+    [secondaryActionButton]="{ label: 'New', icon: 'add_box', click: openAssetSelection }"
+    [loadFn]="loadFn"
+>
+</app-data-list>

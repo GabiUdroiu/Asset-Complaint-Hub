@@ -1,0 +1,164 @@
+<nav>
+    <div class="nav-container">
+        <a routerLink="/home">
+            <h1 class="nav-logo">Complaint Hub <span class="text-gray-600">(v1.0.0)</span></h1>
+        </a>
+        <!-- <ul class="nav-links">
+            <li><a routerLink="/home">Home</a></li>
+            <li><a routerLink="/about">About</a></li>
+        </ul> -->
+        <ul class="flex gap-2 items-center">
+            @if (userService.isResponsible()) {
+                <div
+                    class="view-mode-badge"
+                    [ngClass]="userService.isInSupportMode() ? 'support' : 'personal'"
+                >
+                    @if (userService.isInSupportMode()) {
+                        <mat-icon>group</mat-icon>
+                        <span>Support View</span>
+                    } @else {
+                        <mat-icon>person</mat-icon>
+                        <span>Personal View</span>
+                    }
+                </div>
+            }
+            <button matIconButton (click)="toggleTheme()">
+                <mat-icon
+                    [ngClass]="isLightMode() ? 'text-yellow-400!' : 'text-cyan-100!'"
+                    matTooltip="Toggle {{ isLightMode() ? 'Dark' : 'Light' }} Mode"
+                >
+                    {{ isLightMode() ? 'light_mode' : 'dark_mode' }}
+                </mat-icon>
+            </button>
+            <button [matMenuTriggerFor]="notificationMenu" matIconButton>
+                <mat-icon
+                    class="text-orange-400! bg-transparent!"
+                    [matBadge]="notificationCount()"
+                    [matBadgeHidden]="notificationCount() === 0"
+                    matBadgeColor="accent"
+                    matTooltip="View Notifications"
+                >
+                    notifications
+                </mat-icon>
+            </button>
+            <mat-menu #notificationMenu="matMenu" class="notification-menu">
+                <div class="notification-header">
+                    <div class="flex items-center gap-2">
+                        <mat-icon class="text-base text-orange-400!">notifications_active</mat-icon>
+                        <span class="font-medium text-sm">Notifications</span>
+                    </div>
+                    @if (notificationCount() > 0) {
+                        <button
+                            matIconButton
+                            class="clear-btn"
+                            (click)="clearAllNotifications()"
+                            matTooltip="Clear all"
+                        >
+                            <mat-icon>delete_sweep</mat-icon>
+                        </button>
+                    }
+                </div>
+                <div class="notification-list">
+                    @if ((notifications | async)?.length) {
+                        @for (notification of (notifications | async) || []; track notification.id) {
+                            <div class="notification-card" [ngClass]="['type-' + notification.type, notification.read ? 'is-read' : '']">
+                                <div class="notification-icon">
+                                    @switch (notification.type) {
+                                        @case ('complaint_updated') {
+                                            <mat-icon>assignment</mat-icon>
+                                        }
+                                        @case ('request_updated') {
+                                            <mat-icon>pending_actions</mat-icon>
+                                        }
+                                        @case ('announcement') {
+                                            <mat-icon>campaign</mat-icon>
+                                        }
+                                        @case ('system') {
+                                            <mat-icon>info</mat-icon>
+                                        }
+                                    }
+                                </div>
+                                <div class="notification-content" (click)="notificationService.markAsRead(notification.id)">
+                                    <p class="notification-text">{{ notification.message }}</p>
+                                    <span class="notification-time">{{ notification.timestamp | date: 'short' }}</span>
+                                </div>
+                                <button
+                                    mat-icon-button
+                                    class="dismiss-btn"
+                                    (click)="deleteNotification(notification.id)"
+                                    matTooltip="Dismiss"
+                                >
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </div>
+                        }
+                    } @else {
+                        <div class="empty-state">
+                            <mat-icon>notifications_none</mat-icon>
+                            <span>No notifications</span>
+                        </div>
+                    }
+                </div>
+            </mat-menu>
+            <!-- User Menu -->
+            <button
+                [matMenuTriggerFor]="userMenu"
+                matIconButton
+                class="flex items-center"
+                matTooltip="Your Account"
+            >
+                @if (userService.currentUser(); as user) {
+                    <div class="user-avatar" [title]="user.name">
+                        {{
+                            user.email.charAt(0).toUpperCase() + user.email.charAt(1).toUpperCase()
+                        }}
+                        <!-- Initials -->
+                    </div>
+                } @else {
+                    <mat-icon>account_circle</mat-icon>
+                }
+            </button>
+            <mat-menu #userMenu="matMenu">
+                @if (userService.currentUser(); as user) {
+                    <div mat-menu-item disabled class="pointer-events-none">
+                        <div class="flex flex-col gap-1">
+                            <span class="font-semibold">{{ user.name }}</span>
+                            <span class="text-xs text-gray-500">{{ user.email }}</span>
+                            @if (user.department) {
+                                <span class="text-xs text-gray-400">Department: <strong>{{ user.department }}</strong></span>
+                            }
+                            <mat-chip [color]="roleColors[user.role]" selected>
+                                {{ roleLabels[user.role] }}
+                            </mat-chip>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                    @if (userService.isResponsible()) {
+                        <mat-divider></mat-divider>
+                        @if (userService.isInSupportMode()) {
+                            <button mat-menu-item (click)="userService.toggleViewMode()">
+                                <mat-icon>person</mat-icon>
+                                <span>Switch to Personal View</span>
+                            </button>
+                        } @else {
+                            <button mat-menu-item (click)="userService.toggleViewMode()">
+                                <mat-icon>group</mat-icon>
+                                <span>Switch to Support View</span>
+                            </button>
+                        }
+                    }
+                    <mat-divider></mat-divider>
+                    <button mat-menu-item (click)="userService.logout()">
+                        <mat-icon>logout</mat-icon>
+                        <span>Logout</span>
+                    </button>
+                }
+            </mat-menu>
+        </ul>
+    </div>
+</nav>
+
+<main class="main-container">
+    <router-outlet></router-outlet>
+</main>
+<!-- routerLinkActive="active" -->

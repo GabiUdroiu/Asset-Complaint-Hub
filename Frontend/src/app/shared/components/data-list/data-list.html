@@ -1,0 +1,186 @@
+<section class="page-shell">
+    <header class="page-header">
+        <div class="header-top">
+            <div class="header-left">
+                <button mat-icon-button [routerLink]="backRoute()" matTooltip="Back">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <div>
+                    <h2 class="text-2xl font-medium">{{ pageTitle() }}</h2>
+                    @if (pageSubtitle()) {
+                        <p class="subtitle text-gray-600">{{ pageSubtitle() }}</p>
+                    }
+                </div>
+            </div>
+            <div class="action-buttons">
+                @if (actionButton()) {
+                    <button
+                        (click)="actionButton()!.click()"
+                        class="action-button"
+                        [title]="actionButton()!.label"
+                    >
+                        @if (actionButton()!.icon) {
+                            <mat-icon>{{ actionButton()!.icon }}</mat-icon>
+                        }
+                        <span>{{ actionButton()!.label }}</span>
+                    </button>
+                }
+                @if (secondaryActionButton()) {
+                    <button
+                        (click)="secondaryActionButton()!.click()"
+                        [title]="secondaryActionButton()!.label"
+                        class="secondary-action-button"
+                    >
+                        <mat-icon>{{ secondaryActionButton()!.icon }}</mat-icon>
+                        <span>{{ secondaryActionButton()!.label }}</span>
+                    </button>
+                }
+            </div>
+        </div>
+    </header>
+
+    <section class="filters-section">
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput [formControl]="searchControl" placeholder="Search..." />
+        </mat-form-field>
+
+        @if (statusOptions().length > 0) {
+            <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select [formControl]="statusControl">
+                    <mat-option value="">All Status</mat-option>
+                    @for (opt of statusOptions(); track opt.value) {
+                        <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        }
+
+        @if (showCategoryFilter()) {
+            <mat-form-field>
+                <mat-label>Category</mat-label>
+                <mat-select [formControl]="categoryControl">
+                    <mat-option value="">All Categories</mat-option>
+                    @for (opt of categoryOptions(); track opt.value) {
+                        <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        }
+
+        @if (showDepartmentFilter() && departmentOptions().length > 0) {
+            <mat-form-field>
+                <mat-label>Department</mat-label>
+                <mat-select [(ngModel)]="filterDepartment" (ngModelChange)="loadData()">
+                    <mat-option [value]="null">All Departments</mat-option>
+                    @for (opt of departmentOptions(); track opt.value) {
+                        <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        }
+
+        @if (showViewModeToggle() && cardTemplate()) {
+            <mat-button-toggle-group
+                [value]="viewMode()"
+                (change)="viewMode.set($event.value)"
+                aria-label="View mode"
+            >
+                <mat-button-toggle value="cards"><mat-icon>grid_view</mat-icon></mat-button-toggle>
+                <mat-button-toggle value="table"><mat-icon>view_list</mat-icon></mat-button-toggle>
+            </mat-button-toggle-group>
+        }
+    </section>
+
+    @if (loading()) {
+        <section class="skeleton-container">
+            @for (i of [1, 2, 3]; track i) {
+                <div class="skeleton-row"></div>
+            }
+        </section>
+    } @else if (items().length === 0) {
+        <div class="empty-state">
+            <mat-icon>{{ emptyStateIcon() }}</mat-icon>
+            <h2>{{ emptyStateMessage() }}</h2>
+            <p>
+                @if (hasActiveFilters()) {
+                    {{ emptyStateFilteredMessage() }}
+                }
+            </p>
+        </div>
+    } @else if (showViewModeToggle() && viewMode() === 'cards' && cardTemplate()) {
+        <section class="cards-grid">
+            @for (item of items(); track item.id) {
+                <ng-container
+                    [ngTemplateOutlet]="cardTemplate()!"
+                    [ngTemplateOutletContext]="{ $implicit: item }"
+                ></ng-container>
+            }
+        </section>
+    } @else {
+        <section class="table-container">
+            <table mat-table [dataSource]="items()" class="data-table">
+                @for (col of normalizedColumnDefs(); track col.key) {
+                    <ng-container [matColumnDef]="col.key">
+                        <th mat-header-cell *matHeaderCellDef>{{ col.header }}</th>
+                        @if (col.isActions && col.actions) {
+                            <td mat-cell *matCellDef="let row" class="table-actions">
+                                @for (action of col.actions!; track action.icon) {
+                                    @if (action.routerLink) {
+                                        <button
+                                            mat-icon-button
+                                            [routerLink]="action.routerLink(row)"
+                                            [matTooltip]="action.tooltip"
+                                            [color]="action.color || ''"
+                                        >
+                                            <mat-icon>{{ action.icon }}</mat-icon>
+                                        </button>
+                                    } @else if (action.click) {
+                                        <button
+                                            mat-icon-button
+                                            (click)="action.click(row)"
+                                            [matTooltip]="action.tooltip"
+                                            [color]="action.color || ''"
+                                        >
+                                            <mat-icon>{{ action.icon }}</mat-icon>
+                                        </button>
+                                    }
+                                }
+                            </td>
+                        } @else if (col.isStatus) {
+                            <td mat-cell *matCellDef="let row">
+                                <span
+                                    [ngClass]="[
+                                        'status-dot',
+                                        getCellValue(col, row).toLowerCase().replace(/_/g, '_'),
+                                    ]"
+                                >
+                                    <span class="dot"></span>
+                                    <span>{{ getCellValue(col, row) | titlecase }}</span>
+                                </span>
+                            </td>
+                        } @else if (hasHtmlCell(col)) {
+                            <td mat-cell *matCellDef="let row" [innerHTML]="getHtmlCellValue(col, row)"></td>
+                        } @else {
+                            <td mat-cell *matCellDef="let row">{{ getCellValue(col, row) }}</td>
+                        }
+                    </ng-container>
+                }
+                <tr mat-header-row *matHeaderRowDef="effectiveColumns()"></tr>
+                <tr mat-row *matRowDef="let row; columns: effectiveColumns()"></tr>
+            </table>
+        </section>
+    }
+
+    @if (total() > -1) {
+        <mat-paginator
+            [length]="total()"
+            [pageSize]="pageSize()"
+            [pageSizeOptions]="[10, 25, 50]"
+            (page)="onPageChange($event)"
+            showFirstLastButtons
+        ></mat-paginator>
+    }
+</section>

@@ -1,0 +1,353 @@
+@use '@angular/material' as mat;
+@use 'tailwindcss' as *;
+// ==============================================================================
+// LIGHT THEME VARIABLES
+// ==============================================================================
+:root {
+    // Layout
+    --navbar-height: 46px;
+
+    // Colors
+    --color-primary-gradient: linear-gradient(135deg, #1976d2 0%, #6cdfbd 100%);
+    --color-primary: linear-gradient(145deg, #60a5fa36 0%, #6cdfbd 200%); //#6cdfbd;
+    --color-primary-dark: #1565c0;
+    --color-primary-light: #60a5fa;
+    --color-accent: #f50057;
+    --color-warn: #ff6f00;
+    --color-success: #4caf50;
+    --color-error: #f44336;
+    --color-info: #2196f3;
+
+    // Backgrounds
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9f9f9;
+    --bg-tertiary: #eeeeee;
+    --bg-overlay: rgba(0, 0, 0, 0.5);
+
+    // Text
+    --text-primary: #212121;
+    --text-secondary: #80bdab;
+    --text-tertiary: #999999;
+    --text-inverse: #121212;
+
+    // Borders & Shadows
+    --border-color: #e0e0e0;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 3px 5px rgba(0, 0, 0, 0.16);
+    --shadow-lg: 0 6px 10px rgba(0, 0, 0, 0.2);
+
+    // Snackbar
+    --snackbar-bg: #323232;
+    --snackbar-success: #4caf50;
+    --snackbar-error: #f44336;
+    --snackbar-info: #2196f3;
+    --snackbar-text: #ffffff;
+}
+
+// ==============================================================================
+// DARK THEME VARIABLES
+// ==============================================================================
+[data-theme='dark'] {
+    // --color-primary: #6cdfbd;  //#60a5fa;
+    --color-primary: linear-gradient(145deg, #60a5fa36 0%, #6cdfbd 200%); //#6cdfbd;
+    --color-primary-dark: #3b82f6;
+    --color-primary-light: #93c5fd;
+    --color-accent: #ff1493;
+    --color-warn: #ffb74d;
+    --color-success: #66bb6a;
+    --color-error: #ef5350;
+    --color-info: #60a5fa;
+
+    // Backgrounds
+    --bg-primary: #2a2a2a;
+    --bg-secondary: #3a3a3a;
+    --bg-tertiary: #3a3a3a;
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+
+    // Text
+    --text-primary: #e0e0e0;
+    --text-secondary: #6cdfbd;
+    --text-tertiary: #808080;
+    --text-inverse: #ffffff;
+
+    // Borders & Shadows
+    --border-color: #333333;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 3px 5px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 6px 10px rgba(0, 0, 0, 0.5);
+
+    // Snackbar
+    --snackbar-bg: #424242;
+    --snackbar-success: #66bb6a;
+    --snackbar-error: #ef5350;
+    --snackbar-info: #42a5f5;
+    --snackbar-text: #e0e0e0;
+}
+
+// ==============================================================================
+// MATERIAL THEME
+// ==============================================================================
+html {
+    height: 100%;
+    @include mat.theme(
+        (
+            color: (
+                primary: mat.$azure-palette,
+                tertiary: mat.$blue-palette,
+            ),
+            typography: Roboto,
+            density: 0,
+        )
+    );
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font: var(--mat-sys-body-medium);
+    margin: 0;
+    height: 100%;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
+}
+
+[data-theme='light'] body {
+    color-scheme: light;
+}
+
+[data-theme='dark'] body {
+    color-scheme: dark;
+}
+
+[data-theme='dark'] {
+    mat-icon {
+        color: var(--text-primary);
+    }
+
+    mat-card {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+    }
+
+    mat-form-field {
+        color: var(--text-primary);
+    }
+
+    .mdc-text-field__input {
+        color: var(--text-primary);
+    }
+
+    .mat-mdc-input-element {
+        color: var(--text-primary);
+    }
+
+    .mat-mdc-form-field-label {
+        color: var(--text-secondary);
+    }
+}
+
+// ==============================================================================
+// GLOBAL STYLES
+// ==============================================================================
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+// ==============================================================================
+// UTILITY CLASSES
+// ==============================================================================
+.text-primary {
+    color: var(--text-primary);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.bg-primary {
+    background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+    background-color: var(--bg-secondary);
+}
+
+.shadow-sm {
+    box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+    box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+    box-shadow: var(--shadow-lg);
+}
+
+:root {
+    @include mat.card-overrides(
+        (
+            elevated-container-shape: 50px,
+        )
+    );
+}
+
+// ==============================================================================
+// TABLE & MAT COMPONENT THEME SUPPORT
+// ==============================================================================
+.mat-mdc-table {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.mat-mdc-header-cell {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+}
+
+.mat-mdc-cell {
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.mat-mdc-row {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.mat-mdc-row:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+mat-card {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+mat-form-field {
+    color: var(--text-primary);
+}
+
+mat-dialog-container {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    border-radius: 12px !important;
+}
+
+mat-icon {
+    color: var(--text-primary);
+}
+
+mat-icon.mat-icon-button {
+    color: var(--text-primary);
+}
+
+.mat-badge-accent {
+    background-color: var(--color-accent);
+}
+
+.mat-mdc-list {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.mat-mdc-list-item {
+    color: var(--text-primary);
+}
+
+// ==============================================================================
+// GLOBAL PAGE SHELL & HEADER STYLES
+// ==============================================================================
+.page-shell {
+    min-height: 100%;
+    display: grid;
+    gap: 2rem;
+    color: var(--text-primary);
+    padding: 0.5rem;
+    margin: 0 auto;
+    background-color: var(--bg-primary);
+}
+
+:host {
+    display: block;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+}
+
+.header-top button {
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.header-top div {
+    flex: 1;
+}
+
+.header-top h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.header-top h2 a {
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.header-top h2 a:hover {
+    color: var(--text-link-hover, #1565c0);
+    text-decoration: underline;
+}
+
+.header-top .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0.25rem 0 0 0;
+}
+
+:root {
+    @include mat.table-overrides(
+        (
+            background-color: var(--bg-primary),
+        )
+    );
+}
+
+[data-theme='dark'] {
+    @include mat.table-overrides(
+        (
+            background-color: var(--bg-primary),
+        )
+    );
+}

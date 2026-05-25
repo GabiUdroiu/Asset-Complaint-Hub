@@ -1,0 +1,151 @@
+<section class="page-shell">
+    <header class="page-header">
+        <div class="header-top">
+            <button mat-icon-button routerLink="/complaints" matTooltip="Back to complaints">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <div>
+                <h2 class="text-2xl font-medium">
+                    <a routerLink="/complaints">Complaints</a>
+                    <span class="text-gray-400"
+                        ><mat-icon class="align-middle text-[18px]! w-auto! h-auto!"
+                            >chevron_right</mat-icon
+                        ></span
+                    >
+                    <span class="text-gray-600"
+                        >#{{ complaint()?.id }} {{ complaint()?.title }}</span
+                    >
+                </h2>
+                <p class="subtitle">View and manage complaints</p>
+            </div>
+            @if (userService.isResponsible() && userService.isInSupportMode()) {
+                <div class="actions">
+                    @if (!accepted()) {
+                        <button mat-raised-button color="accent" (click)="acceptComplaint()">
+                            Accept
+                        </button>
+                    } @else {
+                        <select
+                            [ngModel]="selectedStatus()"
+                            (ngModelChange)="selectedStatus.set($event)"
+                            class="status-select"
+                        >
+                            <option value="NEW">NEW</option>
+                            <option value="IN_REVIEW">IN_REVIEW</option>
+                            <option value="IN_PROGRESS">IN_PROGRESS</option>
+                            <option value="RESOLVED">RESOLVED</option>
+                            <option value="CLOSED">CLOSED</option>
+                            <option value="REJECTED">REJECTED</option>
+                        </select>
+                        <button mat-raised-button color="primary" (click)="updateStatus()">
+                            Update Status
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+    </header>
+
+    <div class="content">
+        @if (complaint()) {
+            <div class="content-grid">
+                <div class="left-column">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Details</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <label>Status</label>
+                                <mat-chip-set>
+                                    <mat-chip
+                                        [class]="
+                                            'status-' + (complaint()?.status?.toLowerCase() || '')
+                                        "
+                                    >
+                                        {{ complaint()?.status }}
+                                    </mat-chip>
+                                </mat-chip-set>
+                            </div>
+                            <div class="detail-item">
+                                <label>Asset ID</label>
+                                <p>{{ complaint()?.assetId || 'N/A' }}</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Created</label>
+                                <p>{{ complaint()?.createdAt | date: 'medium' }}</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Updated</label>
+                                <p>{{ complaint()?.updatedAt | date: 'medium' }}</p>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <label>Description</label>
+                            <p>{{ complaint()?.description }}</p>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Comments</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="comments-list">
+                            @for (comment of comments(); track comment.id) {
+                                <div class="comment-item">
+                                    <div class="comment-header">
+                                        <div class="user-info">
+                                            <strong>{{ getEmployeeName(comment.employeeId) }}</strong>
+                                            @if (getEmployeeRole(comment.employeeId)) {
+                                                <span [class]="'role-badge role-' + getEmployeeRole(comment.employeeId).toLowerCase()">
+                                                    {{ getEmployeeRole(comment.employeeId) }}
+                                                </span>
+                                            }
+                                        </div>
+                                        <span class="date">{{
+                                            comment.createdAt | date: 'short'
+                                        }}</span>
+                                    </div>
+                                    <p>{{ comment.text }}</p>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="add-comment">
+                            <textarea
+                                [ngModel]="newComment()"
+                                (ngModelChange)="newComment.set($event)"
+                                placeholder="Add a comment..."
+                                rows="3"
+                            >
+                            </textarea>
+                            <button
+                                mat-raised-button
+                                color="accent"
+                                (click)="addComment()"
+                                [disabled]="!newComment().trim()"
+                            >
+                                Post Comment
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+                </div>
+
+                <div class="right-column">
+                    <mat-card class="workflow-card">
+                        <mat-card-header>
+                            <mat-card-title>Workflow</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <workflow-progress [currentStatus]="complaint()?.status || 'NEW'"></workflow-progress>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        }
+    </div>
+</section>
