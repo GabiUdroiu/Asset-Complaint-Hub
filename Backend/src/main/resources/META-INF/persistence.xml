@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+    
+    <persistence-unit name="default" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/draxlmaierDS</jta-data-source>
+
+        <class>com.draxlmaier.hub.model.Complaint</class>
+        <class>com.draxlmaier.hub.model.ComplaintComment</class>
+        <class>com.draxlmaier.hub.model.ComplaintWorkflow</class>
+        <class>com.draxlmaier.hub.model.Employee</class>
+        <class>com.draxlmaier.hub.model.Department</class>
+        <class>com.draxlmaier.hub.model.Asset</class>
+        <class>com.draxlmaier.hub.model.Role</class>
+        <class>com.draxlmaier.hub.model.Request</class>
+        <class>com.draxlmaier.hub.model.Announcement</class>
+        <class>com.draxlmaier.hub.model.AssignmentTask</class>
+        <class>com.draxlmaier.hub.model.Notification</class>
+
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.default_schema" value="public"/>
+        </properties>
+    </persistence-unit>
+</persistence>
