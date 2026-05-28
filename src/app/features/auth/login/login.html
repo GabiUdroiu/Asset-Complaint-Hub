@@ -1,0 +1,110 @@
+<div class="auth-container">
+    <mat-card class="auth-card">
+        <mat-card-header>
+            <mat-card-title>Sign In</mat-card-title>
+            <mat-card-subtitle>Welcome back!</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="form ">
+                <!-- Error Message -->
+                @if (authService.error()) {
+                    <div class="error-message">
+                        <mat-icon>error_outline</mat-icon>
+                        <span>{{ authService.error() }}</span>
+                    </div>
+                }
+
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Email</mat-label>
+                    <input
+                        matInput
+                        type="email"
+                        formControlName="email"
+                        placeholder="your@email.com"
+                    />
+                    @if (loginForm.get('email')?.hasError('required')) {
+                        <mat-error>Email is required</mat-error>
+                    }
+                    @if (loginForm.get('email')?.hasError('email')) {
+                        <mat-error>Invalid email format</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Password</mat-label>
+                    <input
+                        matInput
+                        [type]="showPassword() ? 'text' : 'password'"
+                        formControlName="password"
+                        placeholder="••••••"
+                        autocomplete="current-password"
+                    />
+                    <button
+                        type="button"
+                        mat-icon-button
+                        matSuffix
+                        (click)="togglePasswordVisibility()"
+                    >
+                        <mat-icon>{{ showPassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+                    </button>
+                    @if (loginForm.get('password')?.hasError('required')) {
+                        <mat-error>Password is required</mat-error>
+                    }
+                </mat-form-field>
+
+                <button
+                    matButton="filled"
+                    color="primary"
+                    type="submit"
+                    [disabled]="loginForm.invalid || loading()"
+                    class="full-width"
+                >
+                    @if (loading()) {
+                        <ng-container>
+                            <mat-progress-spinner
+                                diameter="20"
+                                mode="indeterminate"
+                                class="spinner"
+                            ></mat-progress-spinner>
+                            <span>Signing in...</span>
+                        </ng-container>
+                    } @else {
+                        <span>Sign In</span>
+                    }
+                </button>
+            </form>
+
+            <!-- Demo Buttons -->
+            <div class="demo-section">
+                <p class="text-xs text-gray-500 mb-2">Demo Accounts (Quick Login):</p>
+                <div class="demo-buttons">
+                    @for (user of demoUsers; track user.email) {
+                        <button
+                            mat-stroked-button
+                            (click)="quickLogin(user.email)"
+                            [disabled]="loading()"
+                            class="demo-btn"
+                        >
+                            {{ user.label }}
+                        </button>
+                    }
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <div class="text-center">
+                <p class="text-sm">
+                    Don't have an account?
+                    <button mat-button color="primary" routerLink="/register">Sign Up</button>
+                </p>
+            </div>
+        </mat-card-actions>
+    </mat-card>
+
+    <div class="branding">
+        <h1>Asset Complaint Hub</h1>
+        <p>Asset Complaint Management System</p>
+    </div>
+</div>

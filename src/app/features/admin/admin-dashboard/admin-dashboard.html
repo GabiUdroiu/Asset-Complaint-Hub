@@ -1,0 +1,484 @@
+<section class="page-shell">
+    <header class="page-header">
+        <div class="header-top">
+            <button mat-icon-button routerLink="/home" matTooltip="Back to home">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <div>
+                <h2 class="text-2xl font-medium">Admin Dashboard</h2>
+                <p class="subtitle text-gray-600">System overview and management</p>
+            </div>
+        </div>
+    </header>
+
+    <mat-tab-group>
+        <!-- Stats Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>dashboard</mat-icon>
+                Overview
+            </ng-template>
+
+            <!-- <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #2196f3;">
+                        <mat-icon>inventory_2</mat-icon>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">{{ assets().length }}</div>
+                        <div class="stat-label">Total Assets</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #4caf50;">
+                        <mat-icon>people</mat-icon>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">{{ employees().length }}</div>
+                        <div class="stat-label">Employees</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #ff9800;">
+                        <mat-icon>warning</mat-icon>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">{{ complaints().length }}</div>
+                        <div class="stat-label">Complaints</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background-color: #f44336;">
+                        <mat-icon>assignment</mat-icon>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">{{ requests().length }}</div>
+                        <div class="stat-label">Requests</div>
+                    </div>
+                </div>
+            </section> -->
+
+            <!-- Charts Section -->
+            <section class="charts-section mt-8">
+                <div class="charts-grid">
+                    <mat-card class="chart-card">
+                        <mat-card-header>
+                            <mat-card-title>Complaints by Status</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <canvas #complaintsChart></canvas>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="chart-card">
+                        <mat-card-header>
+                            <mat-card-title>Requests by Status</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <canvas #requestsChart></canvas>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </section>
+
+            <admin-filter-bar
+                [(searchValue)]="overviewSearch"
+                (searchValueChange)="filterActivityLog()"
+                [statusOptions]="[]"
+                [categoryOptions]="[]"
+                [roleOptions]="[]"
+            ></admin-filter-bar>
+
+            <div class="chart-filter">
+                <label class="text-gray-600! font-normal!">Filter by date:</label>
+                <select
+                    [(ngModel)]="dateFilter"
+                    (ngModelChange)="updateCharts()"
+                    class="filter-select"
+                >
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="week">Last 7 Days</option>
+                    <option value="month">Last 30 Days</option>
+                </select>
+            </div>
+        </mat-tab>
+        <!-- Assets Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>inventory_2</mat-icon>
+                Assets
+            </ng-template>
+
+            <div class="tab-content">
+                <admin-filter-bar
+                    [(searchValue)]="assetSearch"
+                    searchPlaceholder="Search assets by name or serial..."
+                    [statusOptions]="assetStatusOptions"
+                    [categoryOptions]="assetCategoryOptions"
+                    (searchChange)="filterAssets()"
+                    (filterChange)="onAssetFilterChange($event)"
+                >
+                <div class="flex items-center gap-2 ml-2 mr-2 mb-5">
+                    @if (canCreateItems()) {
+                    <button (click)="openAddAssetDialog()" matTooltip="Add Asset" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center! m-auto!">add</mat-icon>
+                        Create
+                    </button>
+                    }
+                    <button (click)="openExportDialog('assets')" matTooltip="Export" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center! m-auto!">download</mat-icon>
+                        Export
+                    </button>
+                </div>
+                </admin-filter-bar>
+
+                <table mat-table [dataSource]="filteredAssets()" class="assets-table">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let element">#{{ element.id }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Name</th>
+                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="serialNumber">
+                        <th mat-header-cell *matHeaderCellDef>Serial Number</th>
+                        <td mat-cell *matCellDef="let element">{{ element.serialNumber || '-' }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="category">
+                        <th mat-header-cell *matHeaderCellDef>Category</th>
+                        <td mat-cell *matCellDef="let element">{{ element.category }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span [ngClass]="['status-dot', element.status.toLowerCase()]">
+                                <span class="dot"></span>
+                                <span>{{ element.status }}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let element" class="table-actions triple">
+                            <button
+                                mat-icon-button
+                                (click)="openAssetDetail(element)"
+                                title="View Details"
+                            >
+                                <mat-icon>open_in_new</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                (click)="editAsset(element)"
+                                title="Edit"
+                                [disabled]="!canManageAsset(element)"
+                            >
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                color="warn"
+                                (click)="deleteAsset(element.id)"
+                                title="Delete"
+                                [disabled]="!canManageAsset(element)"
+                            >
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="assetColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: assetColumns"></tr>
+                </table>
+                <mat-paginator
+                    [length]="assetTotal()"
+                    [pageSize]="assetPageSize()"
+                    [pageSizeOptions]="[5, 10, 25, 50]"
+                    (page)="onAssetPageChange($event)"
+                >
+                </mat-paginator>
+            </div>
+        </mat-tab>
+
+        <!-- Employees Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>people</mat-icon>
+                Employees
+            </ng-template>
+
+            <div class="tab-content">
+                <admin-filter-bar
+                    [(searchValue)]="employeeSearch"
+                    searchPlaceholder="Search employees by name or email..."
+                    [roleOptions]="employeeRoleOptions"
+                    (searchChange)="filterEmployees()"
+                    (filterChange)="onEmployeeFilterChange($event)"
+                >
+                <div class="flex items-center gap-2 ml-2 mr-2 mb-5">
+                    @if (canCreateItems()) {
+                    <button (click)="openAddEmployeeDialog()" matTooltip="Add Employee" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center! m-auto!">add</mat-icon>
+                        Create
+                    </button>
+                    }
+                    <button (click)="openExportDialog('employees')" matTooltip="Export" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center! m-auto!">download</mat-icon>
+                        Export
+                    </button>
+                </div>
+                </admin-filter-bar>
+
+                <table mat-table [dataSource]="filteredEmployees()" class="employees-table">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let element">#{{ element.id }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Name</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="employee-badge">
+                                <div class="avatar-circle">{{ getInitials(element.name) }}</div>
+                                <span class="employee-name">{{ element.name }}</span>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef>Email</th>
+                        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="role">
+                        <th mat-header-cell *matHeaderCellDef>Role</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span [ngClass]="['status-dot', 'role-' + element.role.toLowerCase()]">
+                                <span class="dot"></span>
+                                <span>{{ element.role | titlecase }}</span>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let element" class="table-actions">
+                            <button
+                                mat-icon-button
+                                (click)="editEmployee(element)"
+                                title="Edit"
+                                [disabled]="!canManageEmployee(element)"
+                            >
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                color="warn"
+                                (click)="deleteEmployee(element.id)"
+                                title="Delete"
+                                [disabled]="!canManageEmployee(element)"
+                            >
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="employeeColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: employeeColumns"></tr>
+                </table>
+                <mat-paginator
+                    [length]="employeeTotal()"
+                    [pageSize]="employeePageSize()"
+                    [pageSizeOptions]="[5, 10, 25, 50]"
+                    (page)="onEmployeePageChange($event)"
+                >
+                </mat-paginator>
+            </div>
+        </mat-tab>
+
+        <!-- Departments Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>domain</mat-icon>
+                Departments
+            </ng-template>
+
+            <div class="tab-content">
+                <admin-filter-bar
+                    [(searchValue)]="departmentSearch"
+                    searchPlaceholder="Search departments by name..."
+                    (searchChange)="filterDepartments()"
+                >
+                <div class="flex items-center gap-2 ml-2 mr-2 mb-5">
+                    @if (canCreateItems()) {
+                    <button (click)="openAddDepartmentDialog()" matTooltip="Add Department" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center! m-auto!">add</mat-icon>
+                        Create
+                    </button>
+                    }
+                    <button (click)="openExportDialog('departments')" matTooltip="Export" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center! m-auto!">download</mat-icon>
+                        Export
+                    </button>
+                </div>
+                </admin-filter-bar>
+
+                <table mat-table [dataSource]="filteredDepartments()" class="departments-table">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let element">#{{ element.id }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Name</th>
+                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="responsibleEmployee">
+                        <th mat-header-cell *matHeaderCellDef>Responsible Employee</th>
+                        <td mat-cell *matCellDef="let element">
+                            @if (element.responsibleEmployeeName) {
+                                <div class="employee-badge">
+                                    <div class="avatar-circle">{{ getInitials(element.responsibleEmployeeName) }}</div>
+                                    <span class="employee-name">{{ element.responsibleEmployeeName }}</span>
+                                </div>
+                            } @else {
+                                <span>-</span>
+                            }
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let element" class="table-actions">
+                            <button
+                                mat-icon-button
+                                (click)="editDepartment(element)"
+                                title="Edit"
+                                [disabled]="!canManageDepartment(element)"
+                            >
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                color="warn"
+                                (click)="deleteDepartment(element.id)"
+                                title="Delete"
+                                [disabled]="!canManageDepartment(element)"
+                            >
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="departmentColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: departmentColumns"></tr>
+                </table>
+                <mat-paginator
+                    [length]="departmentTotal()"
+                    [pageSize]="departmentPageSize()"
+                    [pageSizeOptions]="[5, 10, 25, 50]"
+                    (page)="onDepartmentPageChange($event)"
+                >
+                </mat-paginator>
+            </div>
+        </mat-tab>
+
+        <!-- Activity Log Tab -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon>history</mat-icon>
+                Activity Log
+            </ng-template>
+
+            <div class="tab-content">
+                <admin-filter-bar
+                    [(searchValue)]="activitySearch"
+                    searchPlaceholder="Search activity..."
+                    (searchChange)="filterActivityLog()"
+                >
+                <div class="flex items-center gap-2 ml-2 mr-2 mb-5">
+                    <button (click)="loadActivityLog()" matTooltip="Refresh" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center!">refresh</mat-icon>
+                        Refresh
+                    </button>
+                    <button (click)="openExportDialog('activity')" matTooltip="Export" class="secondary-action-button">
+                        <mat-icon class="flex! justify-center! text-center! m-auto!">download</mat-icon>
+                        Export
+                    </button>
+                </div>
+                </admin-filter-bar>
+
+                @if (activityLog().length > 0) {
+                    <table mat-table [dataSource]="activityLog()" class="assets-table">
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let entry">
+                                <span class="item-type-chip" [ngClass]="entry.itemType.toLowerCase()">
+                                    <mat-icon>{{ entry.itemType === 'COMPLAINT' ? 'warning' : 'pending_actions' }}</mat-icon>
+                                    {{ entry.itemType | titlecase }}
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="item">
+                            <th mat-header-cell *matHeaderCellDef>Item</th>
+                            <td mat-cell *matCellDef="let entry">
+                                <span class="font-medium">{{ entry.itemTitle || (entry.itemType + ' #' + entry.itemId) }}</span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acceptedBy">
+                            <th mat-header-cell *matHeaderCellDef>Accepted by</th>
+                            <td mat-cell *matCellDef="let entry">
+                                {{ entry.acceptedByName || ('Employee #' + entry.acceptedBy) }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>Status</th>
+                            <td mat-cell *matCellDef="let entry">
+                                <span [ngClass]="['status-dot', entry.status.toLowerCase()]">
+                                    <span class="dot"></span>
+                                    <span>{{ entry.status }}</span>
+                                </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>Accepted at</th>
+                            <td mat-cell *matCellDef="let entry" class="date-cell">
+                                {{ entry.acceptedAt | date: 'dd MMM yyyy, HH:mm' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="activityColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: activityColumns"></tr>
+                    </table>
+                    <mat-paginator
+                        [length]="activityTotal()"
+                        [pageSize]="activityPageSize()"
+                        [pageSizeOptions]="[10, 25, 50]"
+                        (page)="onActivityPageChange($event)"
+                    ></mat-paginator>
+                } @else {
+                    <div class="empty-log">
+                        <mat-icon>history_toggle_off</mat-icon>
+                        <p>No activity recorded yet</p>
+                    </div>
+                }
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+</section>

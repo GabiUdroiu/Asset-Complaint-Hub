@@ -1,0 +1,87 @@
+<section class="home-shell">
+    <section class="cards-grid" aria-label="Main modules">
+        @for (item of shortcuts(); track item.title) {
+            <mat-card class="feature-card">
+                <mat-card-header>
+                    <div class="card-avatar">
+                        <mat-icon>{{ item.icon }}</mat-icon>
+                    </div>
+                    <div>
+                        <mat-card-title>{{ item.title }}</mat-card-title>
+                        <mat-card-subtitle>{{ item.description }}</mat-card-subtitle>
+                    </div>
+                </mat-card-header>
+
+                <mat-card-actions>
+                    <button matButton class="action-btns" (click)="openShortcut(item)">
+                        {{ item.action }}
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        }
+    </section>
+
+    <section class="dashboard-grid">
+        <mat-card class="combined-panel">
+            <mat-card-content>
+                <div class="announcements-section">
+                    <h3 class="section-title">Announcements</h3>
+                    @if (announcements().length === 0) {
+                        <p class="no-data flex flex-col items-center justify-center gap-2"><mat-icon class="text-4xl! w-auto! h-auto!">info</mat-icon> No announcements at the moment</p>
+                    } @else {
+                        <div class="announcement-item">
+                            <div class="announcement-header">
+                                <h4 class="announcement-title">{{ announcements()[0]?.title }}</h4>
+                                <span class="announcement-date">{{ announcements()[0]?.date | date: 'short' }}</span>
+                            </div>
+                            <p class="announcement-description">{{ announcements()[0]?.description }}</p>
+                        </div>
+                    }
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="recent-section">
+                    <h3 class="section-title">Recent Activities</h3>
+                    @if (recentItems().length === 0) {
+                        <p class="no-data flex flex-col items-center justify-center gap-2"><mat-icon class="text-4xl! w-auto! h-auto!">info</mat-icon> No recent activities</p>
+                    } @else {
+                        <div class="recent-list">
+                            @for (item of displayedRecentItems(); track item.type + '-' + item.id) {
+                                <div class="recent-item" (click)="navigateToItem(item)">
+                                    <div class="item-icon">
+                                        <mat-icon>{{
+                                            item.type === 'request'
+                                                ? 'assignment'
+                                                : 'report_problem'
+                                        }}</mat-icon>
+                                    </div>
+                                    <div class="item-content">
+                                        <span class="item-type"
+                                            >{{
+                                                item.type === 'request'
+                                                    ? 'Request'
+                                                    : 'Complaint'
+                                            }}-{{ item.id }}</span
+                                        >
+                                        <span class="item-date">{{
+                                            item.timestamp | date: 'short'
+                                        }}</span>
+                                    </div>
+                                    <button
+                                        mat-icon-button
+                                        class="delete-btn"
+                                        (click)="$event.stopPropagation(); deleteRecentItem(item.id, item.type)"
+                                        matTooltip="Remove from recent"
+                                    >
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </section>
+</section>

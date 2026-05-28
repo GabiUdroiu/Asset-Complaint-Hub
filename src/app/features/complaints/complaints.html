@@ -1,0 +1,18 @@
+﻿<app-data-list
+    [pageTitle]="pageTitle()"
+    pageSubtitle="Issues, priority and resolution"
+    emptyStateIcon="report_problem"
+    emptyStateMessage="No complaints found"
+    emptyStateFilteredMessage="Adjust your filters to see complaints"
+    [columnDefs]="columnDefs()"
+    [statusOptions]="statusOptions"
+    [departmentOptions]="departmentOptions()"
+    [showCategoryFilter]="false"
+    [showDepartmentFilter]="userService.isInSupportMode() && userService.isResponsible()"
+    [departmentFilterDisabled]="departmentFilterDisabled()"
+    [initialDepartmentId]="initialDepartmentId()"
+    [showViewModeToggle]="false"
+    [actionButton]="canExport() ? { label: 'Export', icon: 'file_download', click: openDownloadMenu } : null"
+    [loadFn]="loadFn"
+>
+</app-data-list>

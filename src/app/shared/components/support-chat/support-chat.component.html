@@ -1,0 +1,81 @@
+@if (chatVisible() && isAuthenticated()) {
+  <div class="support-chat-container">
+    <!-- Floating Button -->
+    <button
+      class="floating-button bg-[#60a5fa]!"
+      [class.open]="isOpen()"
+      (click)="toggleChat()"
+      mat-fab
+      color="primary"
+      aria-label="Open support chat"
+    >
+      <mat-icon>contact_support</mat-icon>
+    </button>
+
+  <!-- Chat Panel -->
+  @if (isOpen()) {
+    <mat-card class="chat-panel">
+      <!-- Header -->
+      <div class="chat-header">
+        <h2>FAQ & Support</h2>
+        <div class="header-actions">
+          <button
+            mat-icon-button
+            (click)="hideChat()"
+            aria-label="Disable"
+            class="hide-button"
+            matTooltip="Disable chat"
+          >
+            <mat-icon class="text-[#60a5fa]!">visibility_off</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="closeChat()"
+            aria-label="Close chat"
+            matTooltip="Close chat"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Content -->
+      <div class="chat-content">
+        @if (selectedFaqId() === null) {
+          <!-- FAQ List -->
+          <div class="faq-list">
+            @for (faq of faqItems; track faq.id) {
+              <button
+                class="faq-item"
+                (click)="selectFaq(faq.id)"
+              >
+                <div class="faq-question">
+                  <mat-icon>help_outline</mat-icon>
+                  <span>{{ faq.question }}</span>
+                </div>
+                <mat-icon class="chevron">chevron_right</mat-icon>
+              </button>
+            }
+          </div>
+        } @else {
+          <!-- FAQ Answer -->
+          <div class="faq-answer">
+            <div class="answer-content">
+                <div class="flex">
+                    <button
+                        class="back-button"
+                        (click)="selectFaq(selectedFaqId()!)"
+                    >
+                    <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <h3>{{ getSelectedFaq()?.question }}</h3>
+                </div>
+              <p>{{ getSelectedFaq()?.answer }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </mat-card>
+  }
+  </div>
+}

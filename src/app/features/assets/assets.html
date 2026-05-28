@@ -1,0 +1,32 @@
+﻿<app-data-list pageTitle="Assets" pageSubtitle="Assets, status, ownership and management" emptyStateIcon="inventory_2"
+    emptyStateMessage="No assets found" emptyStateFilteredMessage="Adjust your filters to see assets"
+    [columnDefs]="columnDefs()" [statusOptions]="statusOptions" [categoryOptions]="categoryOptions"
+    [showCategoryFilter]="true" [showDepartmentFilter]="false" [showViewModeToggle]="true"
+    [actionButton]="canExport() ? { label: 'Export', icon: 'file_download', click: openDownloadMenu } : null" [loadFn]="loadFn">
+
+    <!-- Asset card template — projected via @ContentChild -->
+    <ng-template #cardTemplate let-asset>
+        <mat-card class="asset-card">
+            <mat-card-header>
+                <div class="card-header-content">
+                    <mat-card-title>{{ asset.name }}</mat-card-title>
+                </div>
+                <div [ngClass]="['status-badge', 'status-' + asset.status]">
+                    {{ asset.status }}
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="asset-details">
+                    <div class="detail-row">
+                        <span class="label">Last Updated:</span>
+                        <span class="value">{{ asset.lastUpdated ? formatDate(asset.lastUpdated) : '-' }}</span>
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-button (click)="openDetail(asset)"><mat-icon>open_in_new</mat-icon> View Details</button>
+            </mat-card-actions>
+        </mat-card>
+    </ng-template>
+
+</app-data-list>

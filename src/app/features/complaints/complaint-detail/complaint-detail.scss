@@ -1,0 +1,276 @@
+.lock-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-left: 4px solid #f44336;
+    color: #d32f2f;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.lock-banner mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.content {
+    display: block;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 190px;
+    gap: 20px;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.workflow-card {
+    height: 100%;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+:host ::ng-deep .page-header .header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+:host ::ng-deep .page-header .header-top > div:nth-child(2) {
+    flex: 1;
+}
+
+:host ::ng-deep .page-header .header-top .actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    position: absolute;
+    right: 0;
+    flex-shrink: 0;
+}
+
+:host ::ng-deep .page-header .header-top .actions select,
+:host ::ng-deep .page-header .header-top .actions button {
+    flex-shrink: 0;
+}
+
+mat-card {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: 8px;
+}
+
+.left-column mat-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.left-column mat-card:first-child {
+    flex: 0 1 auto;
+}
+
+.left-column mat-card:last-child {
+    flex: 1 1 auto;
+}
+
+.left-column mat-card:last-child mat-card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 475px;
+    overflow: hidden;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-item label {
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+}
+
+.detail-item p {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.description {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.description label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+}
+
+.description p {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.status-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.comments-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 0;
+    padding: 10px 0;
+    min-height: 0;
+}
+
+.comment-item {
+    padding: 12px;
+    margin-bottom: 12px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.comment-header strong {
+    color: var(--text-primary);
+}
+
+.role-badge {
+    padding: 4px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.role-admin {
+    background-color: #ff5252 !important;
+    color: white;
+}
+
+.role-dept_responsible {
+    background-color: #2196f3 !important;
+    color: white;
+}
+
+.role-user {
+    background-color: #4caf50 !important;
+    color: white;
+}
+
+.date {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.comment-item p {
+    margin: 0;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.add-comment {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+textarea {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: inherit;
+    resize: vertical;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+:host ::ng-deep .page-header .header-top .actions .lock-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+:host ::ng-deep .page-header .header-top .actions .lock-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}

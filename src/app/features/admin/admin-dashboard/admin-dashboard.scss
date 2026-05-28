@@ -1,0 +1,350 @@
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 5px;
+}
+
+.charts-section {
+    margin-bottom: 40px;
+}
+
+.chart-filter {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.chart-filter label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.chart-card {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.chart-card mat-card-header {
+    margin-bottom: 20px;
+}
+
+.chart-card canvas {
+    max-height: 300px;
+}
+
+.tab-content {
+    padding: 20px 0;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toolbar-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+}
+
+.toolbar input {
+    flex: 1;
+    max-width: 300px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.toolbar button[mat-icon-button] {
+    flex-shrink: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-color);
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.table-actions {
+    text-align: left;
+    padding-left: 0 !important;
+}
+
+.table-actions button {
+    margin: 0 2px;
+    margin-left: 2px !important;
+}
+
+.triple button {
+    margin: 0 2px;
+    margin-left: -10px !important;
+}
+tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+
+button {
+    cursor: pointer;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background-color: var(--color-info);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+::ng-deep .status-dot {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 14px !important;
+    color: var(--text-primary) !important;
+}
+
+::ng-deep .status-dot .dot {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+}
+
+::ng-deep .status-dot.active .dot {
+    background-color: #4caf50 !important;
+}
+
+::ng-deep .status-dot.inactive .dot {
+    background-color: #757575 !important;
+}
+
+::ng-deep .status-dot.maintenance .dot {
+    background-color: #ff9800 !important;
+}
+
+::ng-deep .status-dot.pending .dot {
+    background-color: #ff9800 !important;
+}
+
+::ng-deep .status-dot.approved .dot {
+    background-color: #4caf50 !important;
+}
+
+::ng-deep .status-dot.rejected .dot {
+    background-color: #f44336 !important;
+}
+
+::ng-deep .status-dot.completed .dot {
+    background-color: #4caf50 !important;
+}
+
+::ng-deep .status-dot.role-user .dot {
+    background-color: #4caf50 !important;
+}
+
+::ng-deep .status-dot.role-dept_responsible .dot {
+    background-color: #2196f3 !important;
+}
+
+::ng-deep .status-dot.role-admin .dot {
+    background-color: #f44336 !important;
+}
+
+.item-type-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+
+    mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+    }
+
+    &.complaint {
+        background: rgba(244, 67, 54, 0.1);
+        color: #f44336;
+    }
+
+    &.request {
+        background: rgba(33, 150, 243, 0.1);
+        color: #2196f3;
+    }
+}
+
+.date-cell {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.empty-log {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 0;
+    color: var(--text-secondary);
+
+    mat-icon {
+        font-size: 2.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        opacity: 0.4;
+    }
+
+    p { margin: 0; font-size: 0.9rem; }
+}
+
+::ng-deep mat-paginator {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-primary) !important;
+}
+
+::ng-deep .mat-mdc-paginator {
+    background: transparent !important;
+}
+
+::ng-deep .mdc-paginator__container {
+    background: transparent !important;
+}
+
+::ng-deep button[matButton="filled"] {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+::ng-deep button[matButton="filled"]:hover {
+    background-color: var(--bg-secondary) !important;
+}
+
+::ng-deep button[matButton="filled"] mat-icon {
+    font-size: 18px !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: normal !important;
+    display: inline !important;
+    align-items: unset !important;
+    justify-content: unset !important;
+    margin: 0 !important;
+    vertical-align: middle !important;
+}
+
+.secondary-action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 10px 16px;
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+    width: 110px;
+    &:hover {
+        background-color: var(--bg-secondary);
+    }
+
+    &:active {
+        background-color: var(--bg-tertiary);
+    }
+
+    mat-icon {
+        font-size: 1.45rem;
+        width: 1.2rem;
+        height: 1.2rem;
+        line-height: 1.2rem;
+    }
+}

@@ -1,0 +1,160 @@
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--color-primary);
+    padding: 2rem;
+    gap: 3rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+
+    mat-card-header {
+        padding: 2rem 2rem 1rem 2rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+
+        mat-card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        mat-card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+    }
+
+    mat-card-content {
+        padding: 2rem;
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            mat-form-field {
+                width: 100%;
+            }
+        }
+    }
+
+    mat-card-actions {
+        padding: 1.5rem 2rem;
+        border-top: 1px solid var(--border-color);
+
+        .text-center {
+            text-align: center;
+
+            p {
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+        }
+    }
+
+    button[type='submit'] {
+        height: 44px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+
+        mat-icon.spinner {
+            animation: spin 1s linear infinite;
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+
+.full-width {
+    width: 100% !important;
+}
+
+.demo-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+
+    .demo-buttons {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+
+        .demo-btn {
+            font-size: 0.85rem;
+            height: 36px;
+        }
+    }
+}
+
+.branding {
+    text-align: center;
+    color: white;
+    user-select: none;
+    cursor: default;
+    pointer-events: none;
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    p {
+        font-size: 1rem;
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .branding {
+        h1 {
+            font-size: 1.75rem;
+        }
+    }
+
+    .auth-card {
+        max-width: 100%;
+    }
+}
+
+.mat-mdc-form-field {
+    background: transparent;
+}
+
+mat-form-field[appearance="fill"] {
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: transparent !important;
+  }
+}
